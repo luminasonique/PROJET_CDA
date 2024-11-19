@@ -32,11 +32,15 @@ final class UserFactory extends PersistentProxyObjectFactory
      */
     protected function defaults(): array|callable
     {
+        // Define the possible roles
+        $roles = ['ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_USER'];
+
         return [
-            'email' => self::faker()->text(100),
-            'first_name' => self::faker()->text(100),
-            'last_name' => self::faker()->text(100),
-            'status' => self::faker()->randomElement(Status::cases()),  // This will randomly pick one of the Status enum values
+            'email' => self::faker()->email(),
+            'first_name' => self::faker()->firstName(),
+            'last_name' => self::faker()->lastName(),
+            'status' => self::faker()->randomElement(Status::cases()), // Randomly pick one of the Status enum values
+            'roles' => [self::faker()->randomElement($roles)], // Randomly assign a role from the available roles
         ];
     }
 

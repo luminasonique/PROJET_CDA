@@ -9,8 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class UserInfo
 {
-    // Other fields...
+    // Primary Key field
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
+    // Other fields
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $user_cv = null;
 
@@ -20,6 +25,13 @@ class UserInfo
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $user_git = null;
 
+    // Getter and Setter for id
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    // Getter and Setter for user_cv
     public function getUserCv(): ?string
     {
         return $this->user_cv;
@@ -32,6 +44,7 @@ class UserInfo
         return $this;
     }
 
+    // Getter and Setter for user_linkedin
     public function getUserLinkedin(): ?string
     {
         return $this->user_linkedin;
@@ -44,6 +57,7 @@ class UserInfo
         return $this;
     }
 
+    // Getter and Setter for user_git
     public function getUserGit(): ?string
     {
         return $this->user_git;
