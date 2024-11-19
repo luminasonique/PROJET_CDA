@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Module index{% endblock %}
+
+{% block body %}
+    <h1>Module index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Content</th>
+                <th>Repository_link</th>
+                <th>Module_order</th>
+                <th>Duration</th>
+                <th>Is_updated</th>
+                <th>Status</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for module in modules %}
+            <tr>
+                <td>{{ module.id }}</td>
+                <td>{{ module.title }}</td>
+                <td>{{ module.description }}</td>
+                <td>{{ module.content }}</td>
+                <td>{{ module.repositoryLink }}</td>
+                <td>{{ module.moduleOrder }}</td>
+                <td>{{ module.duration }}</td>
+                <td>{{ module.isUpdated ? 'Yes' : 'No' }}</td>
+                <td>{{ module.status }}</td>
+                <td>{{ module.createdAt ? module.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ module.updatedAt ? module.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_module_show', {'id': module.id}) }}">show</a>
+                    <a href="{{ path('app_module_edit', {'id': module.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_module_new') }}">Create new</a>
+{% endblock %}

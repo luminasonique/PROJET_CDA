@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Adress index{% endblock %}
+
+{% block body %}
+    <h1>Adress index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>User_account_id</th>
+                <th>Street</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Code</th>
+                <th>Country</th>
+                <th>Status</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for adress in adresses %}
+            <tr>
+                <td>{{ adress.id }}</td>
+                <td>{{ adress.userAccountId }}</td>
+                <td>{{ adress.street }}</td>
+                <td>{{ adress.city }}</td>
+                <td>{{ adress.state }}</td>
+                <td>{{ adress.code }}</td>
+                <td>{{ adress.country }}</td>
+                <td>{{ adress.status }}</td>
+                <td>{{ adress.createdAt ? adress.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ adress.updatedAt ? adress.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_adress_show', {'id': adress.id}) }}">show</a>
+                    <a href="{{ path('app_adress_edit', {'id': adress.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_adress_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rating index{% endblock %}
+
+{% block body %}
+    <h1>Rating index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Supervisor_id</th>
+                <th>Module_id</th>
+                <th>User_rating_id</th>
+                <th>Score</th>
+                <th>Comment</th>
+                <th>Status</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rating in ratings %}
+            <tr>
+                <td>{{ rating.id }}</td>
+                <td>{{ rating.supervisorId }}</td>
+                <td>{{ rating.moduleId }}</td>
+                <td>{{ rating.userRatingId }}</td>
+                <td>{{ rating.score }}</td>
+                <td>{{ rating.comment }}</td>
+                <td>{{ rating.status }}</td>
+                <td>{{ rating.createdAt ? rating.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ rating.updatedAt ? rating.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_rating_show', {'id': rating.id}) }}">show</a>
+                    <a href="{{ path('app_rating_edit', {'id': rating.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_rating_new') }}">Create new</a>
+{% endblock %}

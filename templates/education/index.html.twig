@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Education index{% endblock %}
+
+{% block body %}
+    <h1>Education index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Adress_id</th>
+                <th>Name</th>
+                <th>Start_date</th>
+                <th>End_date</th>
+                <th>Status</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for education in education %}
+            <tr>
+                <td>{{ education.id }}</td>
+                <td>{{ education.adressId }}</td>
+                <td>{{ education.name }}</td>
+                <td>{{ education.startDate ? education.startDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ education.endDate ? education.endDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ education.status }}</td>
+                <td>{{ education.createdAt ? education.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ education.updatedAt ? education.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_education_show', {'id': education.id}) }}">show</a>
+                    <a href="{{ path('app_education_edit', {'id': education.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_education_new') }}">Create new</a>
+{% endblock %}
