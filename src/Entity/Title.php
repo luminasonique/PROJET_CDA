@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TitleRepository;
 use App\Entity\Traits\DateTraits;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TitleRepository::class)]
@@ -23,6 +25,17 @@ class Title
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
+
+    /**
+     * @var Collection<int, Title>
+     */
+    #[ORM\ManyToMany(targetEntity: Title::class, mappedBy: 'relation')]
+    private Collection $titles;
+
+    public function __construct()
+    {
+        $this->titles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -49,6 +62,33 @@ class Title
     public function setStatus(?string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Title>
+     */
+    public function getTitles(): Collection
+    {
+        return $this->titles;
+    }
+
+    public function addTitle(Title $title): static
+    {
+        if (!$this->titles->contains($title)) {
+            $this->titles->add($title);
+            $title->addRelation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTitle(Title $title): static
+    {
+        if ($this->titles->removeElement($title)) {
+            $title->removeRelation($this);
+        }
 
         return $this;
     }

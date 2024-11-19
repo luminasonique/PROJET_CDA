@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ModuleRepository;
 use App\Entity\Traits\DateTraits;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -42,6 +44,20 @@ class Module
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'relation')]
+    private ?Rating $rating = null;
+
+    /**
+     * @var Collection<int, UserModulePlaning>
+     */
+    #[ORM\ManyToMany(targetEntity: UserModulePlaning::class, inversedBy: 'modules')]
+    private Collection $relation;
+
+    public function __construct()
+    {
+        $this->relation = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -140,6 +156,42 @@ class Module
     public function setStatus(?string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getRating(): ?Rating
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?Rating $rating): static
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserModulePlaning>
+     */
+    public function getRelation(): Collection
+    {
+        return $this->relation;
+    }
+
+    public function addRelation(UserModulePlaning $relation): static
+    {
+        if (!$this->relation->contains($relation)) {
+            $this->relation->add($relation);
+        }
+
+        return $this;
+    }
+
+    public function removeRelation(UserModulePlaning $relation): static
+    {
+        $this->relation->removeElement($relation);
 
         return $this;
     }

@@ -40,6 +40,9 @@ class Adress
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
+    #[ORM\OneToOne(inversedBy: 'adress', cascade: ['persist', 'remove'])]
+    private ?user $relation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -125,6 +128,18 @@ class Adress
     public function setStatus(?string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getRelation(): ?user
+    {
+        return $this->relation;
+    }
+
+    public function setRelation(?user $relation): static
+    {
+        $this->relation = $relation;
 
         return $this;
     }

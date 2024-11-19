@@ -7,14 +7,15 @@ use App\Repository\CourseRepository;
 use App\Entity\Traits\DateTraits;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Enum\Confirmed; // Add the use statement for the enum
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
-#[ORM\HasLifecycleCallbacks]  // Enable lifecycle callbacks
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class Course
 {
-
     use DateTraits;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -29,8 +30,12 @@ class Course
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $duration = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $status = null;
+    // Change status to use the Confirmed enum
+    #[ORM\Column(type: "string", enumType: Confirmed::class, nullable: true)]
+    private ?Confirmed $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'courses')]
+    private ?formations $relation = null;
 
     public function getId(): ?int
     {
@@ -73,14 +78,26 @@ class Course
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?Confirmed
     {
         return $this->status;
     }
 
-    public function setStatus(?string $status): static
+    public function setStatus(?Confirmed $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getRelation(): ?formations
+    {
+        return $this->relation;
+    }
+
+    public function setRelation(?formations $relation): static
+    {
+        $this->relation = $relation;
 
         return $this;
     }

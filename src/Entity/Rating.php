@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RatingRepository;
 use App\Entity\Traits\DateTraits;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,6 +38,17 @@ class Rating
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
+
+    /**
+     * @var Collection<int, module>
+     */
+    #[ORM\OneToMany(targetEntity: module::class, mappedBy: 'rating')]
+    private Collection $relation;
+
+    public function __construct()
+    {
+        $this->relation = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -110,6 +123,36 @@ class Rating
     public function setStatus(?string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, module>
+     */
+    public function getRelation(): Collection
+    {
+        return $this->relation;
+    }
+
+    public function addRelation(module $relation): static
+    {
+        if (!$this->relation->contains($relation)) {
+            $this->relation->add($relation);
+            $relation->setRating($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelation(module $relation): static
+    {
+        if ($this->relation->removeElement($relation)) {
+            // set the owning side to null (unless already changed)
+            if ($relation->getRating() === $this) {
+                $relation->setRating(null);
+            }
+        }
 
         return $this;
     }
