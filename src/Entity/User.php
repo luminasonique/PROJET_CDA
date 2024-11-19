@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\HasLifecycleCallbacks]  // Enable lifecycle callbacks
 #[ApiResource]
 class User
 {
@@ -106,7 +107,10 @@ class User
 
     public function setRoles(?array $roles): static
     {
+
+        if (empty(array_dif($roles,['ROLE_STUDENT','ROLE_TEATCHER','ROLE_ADMIN','ROLE_USER']))) {
         $this->roles = $roles;
+        }
 
         return $this;
     }

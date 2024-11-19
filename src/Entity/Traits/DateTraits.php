@@ -1,5 +1,7 @@
 <?php
 
+// src/Entity/Traits/DateTraits.php
+
 namespace App\Entity\Traits;
 
 use Doctrine\DBAL\Types\Types;
@@ -35,5 +37,21 @@ trait DateTraits
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    // Lifecycle callback to set 'createdAt' when an entity is persisted
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTime();
+        }
+    }
+
+    // Lifecycle callback to set 'updatedAt' when an entity is updated
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
     }
 }
