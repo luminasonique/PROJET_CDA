@@ -11,11 +11,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ModuleRepository::class)]
-#[ORM\HasLifecycleCallbacks]  // Enable lifecycle callbacks
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class Module
 {
     use DateTraits;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -31,32 +32,28 @@ class Module
     private ?string $content = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $repository_link = null;
+    private ?string $repositoryLink = null; // Renamed `repository_link` for camelCase consistency
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
-    private ?int $module_order = null;
+    private ?int $moduleOrder = null; // Renamed `module_order`
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $duration = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $is_updated = null;
+    private ?bool $isUpdated = null; // Renamed `is_updated`
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
-    #[ORM\ManyToOne(inversedBy: 'relation')]
+    #[ORM\ManyToOne(inversedBy: 'modules')] // Updated for correct relation naming
     private ?Rating $rating = null;
 
-    /**
-     * @var Collection<int, UserModulePlaning>
-     */
-    #[ORM\ManyToMany(targetEntity: UserModulePlaning::class, inversedBy: 'modules')]
-    private Collection $relation;
+ 
 
     public function __construct()
     {
-        $this->relation = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -102,24 +99,24 @@ class Module
 
     public function getRepositoryLink(): ?string
     {
-        return $this->repository_link;
+        return $this->repositoryLink;
     }
 
-    public function setRepositoryLink(?string $repository_link): static
+    public function setRepositoryLink(?string $repositoryLink): static
     {
-        $this->repository_link = $repository_link;
+        $this->repositoryLink = $repositoryLink;
 
         return $this;
     }
 
     public function getModuleOrder(): ?int
     {
-        return $this->module_order;
+        return $this->moduleOrder;
     }
 
-    public function setModuleOrder(?int $module_order): static
+    public function setModuleOrder(?int $moduleOrder): static
     {
-        $this->module_order = $module_order;
+        $this->moduleOrder = $moduleOrder;
 
         return $this;
     }
@@ -138,12 +135,12 @@ class Module
 
     public function isUpdated(): ?bool
     {
-        return $this->is_updated;
+        return $this->isUpdated;
     }
 
-    public function setUpdated(?bool $is_updated): static
+    public function setIsUpdated(?bool $isUpdated): static
     {
-        $this->is_updated = $is_updated;
+        $this->isUpdated = $isUpdated;
 
         return $this;
     }
@@ -173,25 +170,25 @@ class Module
     }
 
     /**
-     * @return Collection<int, UserModulePlaning>
+     * @return Collection<int, UserModulePlanning>
      */
-    public function getRelation(): Collection
+    public function getUsers(): Collection
     {
-        return $this->relation;
+        return $this->users;
     }
 
-    public function addRelation(UserModulePlaning $relation): static
+    public function addUser(UserModulePlanning $user): static
     {
-        if (!$this->relation->contains($relation)) {
-            $this->relation->add($relation);
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
         }
 
         return $this;
     }
 
-    public function removeRelation(UserModulePlaning $relation): static
+    public function removeUser(UserModulePlanning $user): static
     {
-        $this->relation->removeElement($relation);
+        $this->users->removeElement($user);
 
         return $this;
     }

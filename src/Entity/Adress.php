@@ -3,16 +3,16 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\AdressRepository;
 use App\Entity\Traits\DateTraits;
+use App\Repository\AdressRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AdressRepository::class)]
-#[ORM\HasLifecycleCallbacks]  // Enable lifecycle callbacks
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class Adress
 {
-   use DateTraits; // Applying the trait
+    use DateTraits;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -41,7 +41,7 @@ class Adress
     private ?string $status = null;
 
     #[ORM\OneToOne(inversedBy: 'adress', cascade: ['persist', 'remove'])]
-    private ?user $relation = null;
+    private ?User $relation = null; // Renamed to `User`
 
     public function getId(): ?int
     {
@@ -132,12 +132,12 @@ class Adress
         return $this;
     }
 
-    public function getRelation(): ?user
+    public function getRelation(): ?User
     {
         return $this->relation;
     }
 
-    public function setRelation(?user $relation): static
+    public function setRelation(?User $relation): static
     {
         $this->relation = $relation;
 

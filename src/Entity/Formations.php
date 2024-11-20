@@ -19,18 +19,18 @@ class Formations
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date_session = null;
+    private ?\DateTimeInterface $sessionDate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $satus_actif = null;
+    private ?string $status = null;
 
     /**
      * @var Collection<int, Course>
      */
-    #[ORM\OneToMany(targetEntity: Course::class, mappedBy: 'relation')]
+    #[ORM\OneToMany(targetEntity: Course::class, mappedBy: 'formation', cascade: ['persist', 'remove'])]
     private Collection $courses;
 
     public function __construct()
@@ -43,38 +43,38 @@ class Formations
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->nom;
+        return $this->name;
     }
 
-    public function setNom(string $nom): static
+    public function setName(string $name): static
     {
-        $this->nom = $nom;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getDateSession(): ?\DateTimeInterface
+    public function getSessionDate(): ?\DateTimeInterface
     {
-        return $this->date_session;
+        return $this->sessionDate;
     }
 
-    public function setDateSession(?\DateTimeInterface $date_session): static
+    public function setSessionDate(?\DateTimeInterface $sessionDate): static
     {
-        $this->date_session = $date_session;
+        $this->sessionDate = $sessionDate;
 
         return $this;
     }
 
-    public function getSatusActif(): ?string
+    public function getStatus(): ?string
     {
-        return $this->satus_actif;
+        return $this->status;
     }
 
-    public function setSatusActif(?string $satus_actif): static
+    public function setStatus(?string $status): static
     {
-        $this->satus_actif = $satus_actif;
+        $this->status = $status;
 
         return $this;
     }
@@ -91,7 +91,7 @@ class Formations
     {
         if (!$this->courses->contains($course)) {
             $this->courses->add($course);
-            $course->setRelation($this);
+            $course->setRelation($this); // Ensures bidirectional consistency
         }
 
         return $this;
@@ -100,7 +100,6 @@ class Formations
     public function removeCourse(Course $course): static
     {
         if ($this->courses->removeElement($course)) {
-            // set the owning side to null (unless already changed)
             if ($course->getRelation() === $this) {
                 $course->setRelation(null);
             }

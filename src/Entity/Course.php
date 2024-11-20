@@ -3,11 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\CourseRepository;
 use App\Entity\Traits\DateTraits;
+use App\Enum\Confirmed;
+use App\Repository\CourseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Enum\Confirmed; // Add the use statement for the enum
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -30,12 +30,12 @@ class Course
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $duration = null;
 
-    // Change status to use the Confirmed enum
     #[ORM\Column(type: "string", enumType: Confirmed::class, nullable: true)]
     private ?Confirmed $status = null;
 
-    #[ORM\ManyToOne(inversedBy: 'courses')]
-    private ?formations $relation = null;
+    // Corrected relationship with the 'Formation' entity
+    #[ORM\ManyToOne(targetEntity: Formations::class, inversedBy: 'courses')]
+    private ?Formations $formation = null;  // Renamed for clarity
 
     public function getId(): ?int
     {
@@ -90,12 +90,12 @@ class Course
         return $this;
     }
 
-    public function getRelation(): ?formations
+    public function getRelation(): ?Formation
     {
         return $this->relation;
     }
 
-    public function setRelation(?formations $relation): static
+    public function setRelation(?Formation $relation): static
     {
         $this->relation = $relation;
 

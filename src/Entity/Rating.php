@@ -16,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Rating
 {
     use DateTraits;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -40,9 +41,9 @@ class Rating
     private ?string $status = null;
 
     /**
-     * @var Collection<int, module>
+     * @var Collection<int, Module>
      */
-    #[ORM\OneToMany(targetEntity: module::class, mappedBy: 'rating')]
+    #[ORM\OneToMany(targetEntity: Module::class, mappedBy: 'rating')]
     private Collection $relation;
 
     public function __construct()
@@ -63,7 +64,6 @@ class Rating
     public function setSupervisorId(?int $supervisor_id): static
     {
         $this->supervisor_id = $supervisor_id;
-
         return $this;
     }
 
@@ -75,7 +75,6 @@ class Rating
     public function setModuleId(?int $module_id): static
     {
         $this->module_id = $module_id;
-
         return $this;
     }
 
@@ -87,7 +86,6 @@ class Rating
     public function setUserRatingId(?int $user_rating_id): static
     {
         $this->user_rating_id = $user_rating_id;
-
         return $this;
     }
 
@@ -99,7 +97,6 @@ class Rating
     public function setScore(?int $score): static
     {
         $this->score = $score;
-
         return $this;
     }
 
@@ -111,7 +108,6 @@ class Rating
     public function setComment(?string $comment): static
     {
         $this->comment = $comment;
-
         return $this;
     }
 
@@ -123,37 +119,33 @@ class Rating
     public function setStatus(?string $status): static
     {
         $this->status = $status;
-
         return $this;
     }
 
     /**
-     * @return Collection<int, module>
+     * @return Collection<int, Module>
      */
     public function getRelation(): Collection
     {
         return $this->relation;
     }
 
-    public function addRelation(module $relation): static
+    public function addRelation(Module $relation): static
     {
         if (!$this->relation->contains($relation)) {
             $this->relation->add($relation);
             $relation->setRating($this);
         }
-
         return $this;
     }
 
-    public function removeRelation(module $relation): static
+    public function removeRelation(Module $relation): static
     {
         if ($this->relation->removeElement($relation)) {
-            // set the owning side to null (unless already changed)
             if ($relation->getRating() === $this) {
                 $relation->setRating(null);
             }
         }
-
         return $this;
     }
 }

@@ -55,8 +55,7 @@ class User
     #[ORM\OneToOne(mappedBy: 'relation', cascade: ['persist', 'remove'])]
     private ?Adress $adress = null;
 
-    #[ORM\ManyToMany(targetEntity: UserModulePlaning::class, mappedBy: 'relation')]
-    private Collection $userModulePlanings;
+   
 
     public function __construct()
     {

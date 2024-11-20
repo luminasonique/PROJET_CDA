@@ -1,35 +1,36 @@
-<?php
+<?php 
 
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Traits\DateTraits;
 use App\Repository\EducationRepository;
 use Doctrine\DBAL\Types\Types;
-use App\Entity\Traits\DateTraits;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EducationRepository::class)]
-#[ORM\HasLifecycleCallbacks]  // Enable lifecycle callbacks
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class Education
 {
     use DateTraits;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $adress_id = null;
+    private ?int $addressId = null; // Updated for better readability
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $start_date = null;
+    private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $end_date = null;
+    private ?\DateTimeInterface $endDate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
@@ -39,14 +40,14 @@ class Education
         return $this->id;
     }
 
-    public function getAdressId(): ?int
+    public function getAddressId(): ?int
     {
-        return $this->adress_id;
+        return $this->addressId;
     }
 
-    public function setAdressId(?int $adress_id): static
+    public function setAddressId(?int $addressId): static
     {
-        $this->adress_id = $adress_id;
+        $this->addressId = $addressId;
 
         return $this;
     }
@@ -65,24 +66,24 @@ class Education
 
     public function getStartDate(): ?\DateTimeInterface
     {
-        return $this->start_date;
+        return $this->startDate;
     }
 
-    public function setStartDate(?\DateTimeInterface $start_date): static
+    public function setStartDate(?\DateTimeInterface $startDate): static
     {
-        $this->start_date = $start_date;
+        $this->startDate = $startDate;
 
         return $this;
     }
 
     public function getEndDate(): ?\DateTimeInterface
     {
-        return $this->end_date;
+        return $this->endDate;
     }
 
-    public function setEndDate(?\DateTimeInterface $end_date): static
+    public function setEndDate(?\DateTimeInterface $endDate): static
     {
-        $this->end_date = $end_date;
+        $this->endDate = $endDate;
 
         return $this;
     }

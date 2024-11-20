@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Title
 {
     use DateTraits;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -29,7 +30,7 @@ class Title
     /**
      * @var Collection<int, Title>
      */
-    #[ORM\ManyToMany(targetEntity: Title::class, mappedBy: 'relation')]
+    #[ORM\ManyToMany(targetEntity: Title::class, mappedBy: 'titles', cascade: ['persist'])]
     private Collection $titles;
 
     public function __construct()
@@ -78,7 +79,7 @@ class Title
     {
         if (!$this->titles->contains($title)) {
             $this->titles->add($title);
-            $title->addRelation($this);
+            // No need to explicitly persist related entities
         }
 
         return $this;
@@ -86,9 +87,8 @@ class Title
 
     public function removeTitle(Title $title): static
     {
-        if ($this->titles->removeElement($title)) {
-            $title->removeRelation($this);
-        }
+        $this->titles->removeElement($title);
+        // No need to handle the inverse side explicitly
 
         return $this;
     }
